@@ -4,6 +4,7 @@ import 'package:gmap/models/place.dart';
 import 'package:gmap/screens/search.dart';
 import 'package:gmap/services/geolocator_service.dart';
 import 'package:gmap/services/places_service.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 void main() => runApp(MyApp());
@@ -17,9 +18,13 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         FutureProvider(create: (context) => locatorService.getLocation()),
-        ProxyProvider<Position,Future<List<Place>>>( 
-          update: (context,position,places){
-            return (position !=null) ? placesService.getPlaces(position.latitude, position.longitude) :null;
+        FutureProvider(create: (context) {
+          ImageConfiguration configuration = createLocalImageConfiguration(context);
+          return BitmapDescriptor.fromAssetImage(configuration, 'assets/images/parking-icon.png');
+        }),
+        ProxyProvider2<Position,BitmapDescriptor,Future<List<Place>>>( 
+          update: (context,position,icon,places){
+            return (position !=null) ? placesService.getPlaces(position.latitude, position.longitude,icon) :null;
           },
         )
       ],
