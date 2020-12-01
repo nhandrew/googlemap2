@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:gmap/services/geolocator_service.dart';
 import 'package:gmap/services/marker_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../models/place.dart';
 
@@ -42,7 +42,7 @@ class Search extends StatelessWidget {
                               height: 10.0,
                             ),
                             Expanded(
-                              child: ListView.builder(
+                              child: (places.length > 0) ? ListView.builder(
                                   itemCount: places.length,
                                   itemBuilder: (context, index) {
                                     return FutureProvider(
@@ -120,7 +120,7 @@ class Search extends StatelessWidget {
                                         ),
                                       ),
                                     );
-                                  }),
+                                  }) : Center(child:Text('No Parking Found Nearby'),),
                             )
                           ],
                         )
